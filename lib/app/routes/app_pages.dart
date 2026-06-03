@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
 import '../modules/dashboard/bindings/dashboard_binding.dart';
-import '../modules/dashboard/views/dashboard_page.dart';
 import '../modules/transactions/views/transactions_page.dart';
 import '../modules/add_transaction/views/add_transaction_page.dart';
 import '../modules/budget/views/budget_page.dart';
 import '../modules/backup/views/backup_page.dart';
+import '../core/widgets/main_navigation.dart';
 
 part 'app_routes.dart';
 
@@ -16,7 +16,7 @@ class AppPages {
   static final routes = [
     GetPage(
       name: _Paths.DASHBOARD,
-      page: () => const DashboardPage(),
+      page: () => const MainNavigation(),
       binding: DashboardBinding(),
     ),
     GetPage(

@@ -15,6 +15,7 @@ class BudgetPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text('Monthly Budgets'),
       ),
       body: Column(
@@ -43,6 +44,88 @@ class BudgetPage extends StatelessWidget {
               ],
             ),
           ),
+
+          // Budget Summary Header
+          Obx(() {
+            final expenseCategories = txController.categories
+                .where((c) => c.type == 'expense')
+                .toList();
+            double totalBudget = 0;
+            double totalSpent = 0;
+            for (var cat in expenseCategories) {
+              final budgetList = budgetController.budgets.where((b) => b.categoryId == cat.id).toList();
+              if (budgetList.isNotEmpty) {
+                totalBudget += budgetList.first.amount;
+              }
+              totalSpent += budgetController.getSpendingForCategory(cat.id!);
+            }
+            final remaining = totalBudget - totalSpent;
+            final percent = totalBudget > 0 ? (totalSpent / totalBudget) : 0.0;
+            final isDark = Theme.of(context).brightness == Brightness.dark;
+
+            if (totalBudget == 0) return const SizedBox.shrink();
+
+            Color ringColor = const Color(0xFF4CAF50);
+            if (percent > 0.9) {
+              ringColor = const Color(0xFFF44336);
+            } else if (percent > 0.75) {
+              ringColor = Colors.orange;
+            }
+
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+              child: GlassCard(
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 60,
+                      height: 60,
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          CircularProgressIndicator(
+                            value: percent > 1.0 ? 1.0 : percent,
+                            strokeWidth: 6,
+                            backgroundColor: isDark ? Colors.white10 : Colors.black12,
+                            valueColor: AlwaysStoppedAnimation<Color>(ringColor),
+                          ),
+                          Center(
+                            child: Text(
+                              '${(percent * 100).toStringAsFixed(0)}%',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w800,
+                                color: ringColor,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _summaryRow('Budget', totalBudget, isDark ? Colors.white70 : Colors.black54),
+                          const SizedBox(height: 4),
+                          _summaryRow('Spent', totalSpent, percent > 0.9 ? const Color(0xFFF44336) : Colors.orange),
+                          const SizedBox(height: 4),
+                          _summaryRow(
+                            'Remaining',
+                            remaining.abs(),
+                            remaining >= 0 ? const Color(0xFF4CAF50) : const Color(0xFFF44336),
+                            prefix: remaining < 0 ? '-' : '',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }),
+          const SizedBox(height: 4),
 
           Expanded(
             child: Obx(() {
@@ -211,6 +294,26 @@ class BudgetPage extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+
+  Widget _summaryRow(String label, double amount, Color color, {String prefix = ''}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+        ),
+        Text(
+          '$prefix\$${amount.toStringAsFixed(2)}',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+            color: color,
+          ),
+        ),
+      ],
     );
   }
 }

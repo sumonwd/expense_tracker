@@ -16,6 +16,31 @@
 
 ---
 
+## 📸 App Showcase
+
+<p align="center">
+  <img src="screenshots/feature_dashboard.png" width="180" alt="Track spending at a glance"/>
+  <img src="screenshots/feature_wallets.png" width="180" alt="Manage multiple wallets"/>
+  <img src="screenshots/feature_insights.png" width="180" alt="Personalized insights"/>
+  <img src="screenshots/feature_budgets.png" width="180" alt="Budget management"/>
+  <img src="screenshots/feature_backup.png" width="180" alt="Backup and sync"/>
+</p>
+
+<p align="center">
+  <b>Track Spending</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <b>Multi-Wallet</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <b>Smart Insights</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <b>Budget Control</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <b>Backup & Sync</b>
+</p>
+
+<p align="center">
+  <img src="screenshots/feature_themes.png" width="500" alt="Dark and light themes"/>
+</p>
+<p align="center"><b>🎨 Beautiful Dark & Light Themes</b></p>
+
+---
+
 ## ✨ Features
 
 ### 📊 Dashboard

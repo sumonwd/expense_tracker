@@ -23,16 +23,6 @@ class DashboardPage extends StatelessWidget {
           icon: Icon(themeController.isDarkMode.value ? Icons.light_mode : Icons.dark_mode),
           onPressed: themeController.toggleTheme,
         )),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.cloud_upload_outlined),
-            onPressed: () => Get.toNamed(Routes.BACKUP),
-          ),
-          IconButton(
-            icon: const Icon(Icons.pie_chart_outline),
-            onPressed: () => Get.toNamed(Routes.BUDGET),
-          ),
-        ],
       ),
       body: RefreshIndicator(
         onRefresh: () => txController.loadAllData(),
@@ -196,6 +186,30 @@ class DashboardPage extends StatelessWidget {
               const ExpenseChart(),
               const SizedBox(height: 24),
 
+              // Quick Actions
+              Row(
+                children: [
+                  Expanded(
+                    child: _QuickActionButton(
+                      icon: Icons.remove_circle_outline,
+                      label: 'Add Expense',
+                      color: const Color(0xFFF44336),
+                      onTap: () => Get.toNamed(Routes.ADD_TRANSACTION, arguments: 'expense'),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _QuickActionButton(
+                      icon: Icons.add_circle_outline,
+                      label: 'Add Income',
+                      color: const Color(0xFF4CAF50),
+                      onTap: () => Get.toNamed(Routes.ADD_TRANSACTION, arguments: 'income'),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -238,15 +252,10 @@ class DashboardPage extends StatelessWidget {
                   },
                 );
               }),
-              const SizedBox(height: 80),
+              const SizedBox(height: 20),
             ],
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).primaryColor,
-        child: const Icon(Icons.add, color: Colors.white),
-        onPressed: () => Get.toNamed(Routes.ADD_TRANSACTION),
       ),
     );
   }
@@ -565,6 +574,59 @@ class DashboardPage extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _QuickActionButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+
+  const _QuickActionButton({
+    required this.icon,
+    required this.label,
+    required this.color,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: isDark ? 0.12 : 0.08),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: color.withValues(alpha: 0.2),
+              width: 1,
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, color: color, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: TextStyle(
+                  color: color,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 13,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
