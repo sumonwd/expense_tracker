@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
 
     return Obx(() {
       return GetMaterialApp(
-        title: 'Personal Expense Tracker',
+        title: 'Expense Tracker',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         themeMode: themeController.isDarkMode.value ? ThemeMode.dark : ThemeMode.light,
