@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:http/http.dart' as http;
@@ -16,7 +17,7 @@ class GoogleDriveService {
   Future<void> _ensureInitialized() async {
     if (!_initialized) {
       await _googleSignIn.initialize(
-        serverClientId: const String.fromEnvironment('GOOGLE_SERVER_CLIENT_ID'),
+        serverClientId: dotenv.env['GOOGLE_SERVER_CLIENT_ID'] ?? '',
       );
       _initialized = true;
     }
