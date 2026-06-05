@@ -16,8 +16,7 @@ class GoogleDriveService {
   Future<void> _ensureInitialized() async {
     if (!_initialized) {
       await _googleSignIn.initialize(
-        // Use the "Web application" type OAuth Client ID (not Android)
-        serverClientId: '241691454409-647invdoqk4oocdqre516bc8ifh44p35.apps.googleusercontent.com',
+        serverClientId: const String.fromEnvironment('GOOGLE_SERVER_CLIENT_ID'),
       );
       _initialized = true;
     }
