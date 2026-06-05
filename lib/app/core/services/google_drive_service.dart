@@ -11,13 +11,14 @@ class GoogleDriveService {
   GoogleSignInAccount? _currentUser;
   GoogleSignInAccount? get currentUser => _currentUser;
 
-  static const List<String> _driveScopes = [
-    drive.DriveApi.driveAppdataScope,
-  ];
+  static const List<String> _driveScopes = [drive.DriveApi.driveAppdataScope];
 
   Future<void> _ensureInitialized() async {
     if (!_initialized) {
-      await _googleSignIn.initialize();
+      await _googleSignIn.initialize(
+        // Use the "Web application" type OAuth Client ID (not Android)
+        serverClientId: '241691454409-647invdoqk4oocdqre516bc8ifh44p35.apps.googleusercontent.com',
+      );
       _initialized = true;
     }
   }
@@ -74,17 +75,10 @@ class GoogleDriveService {
     driveFile.description = description ?? 'Encrypted Personal Expense Tracker Backup';
 
     if (existingFile != null && existingFile.id != null) {
-      return await driveApi.files.update(
-        driveFile,
-        existingFile.id!,
-        uploadMedia: media,
-      );
+      return await driveApi.files.update(driveFile, existingFile.id!, uploadMedia: media);
     } else {
       driveFile.parents = ['appDataFolder'];
-      return await driveApi.files.create(
-        driveFile,
-        uploadMedia: media,
-      );
+      return await driveApi.files.create(driveFile, uploadMedia: media);
     }
   }
 
@@ -97,10 +91,9 @@ class GoogleDriveService {
       return null;
     }
 
-    final mediaResponse = await driveApi.files.get(
-      existingFile.id!,
-      downloadOptions: drive.DownloadOptions.fullMedia,
-    ) as drive.Media;
+    final mediaResponse =
+        await driveApi.files.get(existingFile.id!, downloadOptions: drive.DownloadOptions.fullMedia)
+            as drive.Media;
 
     final List<int> dataBytes = [];
     await for (final chunk in mediaResponse.stream) {

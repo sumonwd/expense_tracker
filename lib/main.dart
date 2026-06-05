@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'app/core/controllers/theme_controller.dart';
+import 'app/core/controllers/update_controller.dart';
 import 'app/core/theme/app_theme.dart';
+import 'app/core/widgets/update_dialog.dart';
 import 'app/routes/app_pages.dart';
 
 void main() async {
@@ -9,6 +11,7 @@ void main() async {
 
   // Inject global dependencies
   Get.put(ThemeController());
+  Get.put(UpdateController());
 
   runApp(const MyApp());
 }
@@ -19,6 +22,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeController themeController = Get.find<ThemeController>();
+
+    // Listen for update availability and show dialog
+    UpdateDialog.show();
 
     return Obx(() {
       return GetMaterialApp(
